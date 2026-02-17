@@ -32,7 +32,42 @@ export const PeoplePage = () => {
   const sort = searchParams.get('sort');
   const order = searchParams.get('order');
 
-  const filteredPeople = peoples.filter((person: Person) => person);
+  const filteredPeople = peoples
+    .filter((person: Person) => {
+      return sex !== '' ? person.sex === sex : true;
+    })
+    .filter((person: Person) => {
+      return (
+        person.name.toLowerCase().includes(query.toLowerCase()) ||
+        person.motherName?.toLowerCase().includes(query.toLowerCase()) ||
+        person.fatherName?.toLowerCase().includes(query.toLowerCase())
+      );
+    })
+    .filter((person: Person) => {
+      if (centuries.length === 0) {
+        return true;
+      }
+
+      return centuries.some(
+        date => Number(date) === Math.ceil(person.born / 100),
+      );
+    })
+    .sort((a, b) => {
+      if (!sort) {
+        return 0;
+      }
+
+      const direction = order === 'desc' ? -1 : 1;
+
+      const aVal = a[sort as 'name' | 'sex' | 'born' | 'died'];
+      const bVal = b[sort as 'name' | 'sex' | 'born' | 'died'];
+
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        return aVal.localeCompare(bVal) * direction;
+      } else {
+        return (Number(aVal) - Number(bVal)) * direction;
+      }
+    });
 
   return (
     <>
@@ -54,9 +89,11 @@ export const PeoplePage = () => {
                     <p data-cy="peopleLoadingError">Something went wrong</p>
                   )}
 
-                  <p>
-                    There are no people matching the current search criteria
-                  </p>
+                  {peoples.length > 0 && filteredPeople.length === 0 && (
+                    <p>
+                      There are no people matching the current search criteria
+                    </p>
+                  )}
 
                   {filteredPeople.length === 0 ? (
                     <p data-cy="noPeopleMessage">
