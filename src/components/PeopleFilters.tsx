@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SearchLink } from './SearchLink';
 import classNames from 'classnames';
@@ -12,7 +13,12 @@ export const PeopleFilters = () => {
   function handleQueryChange(event: React.ChangeEvent<HTMLInputElement>) {
     const params = new URLSearchParams(searchParams);
 
-    params.set('query', event.target.value);
+    if (event.target.value === '') {
+      params.delete('query');
+    } else {
+      params.set('query', event.target.value);
+    }
+
     setSearchParams(params);
   }
 
