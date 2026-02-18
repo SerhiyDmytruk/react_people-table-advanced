@@ -26,7 +26,6 @@ export const Navbar = () => {
           </NavLink>
 
           <NavLink
-            aria-current="page"
             className={getClassName}
             to={{ pathname: '/people', search: location.search }}
           >

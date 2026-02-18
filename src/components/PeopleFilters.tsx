@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ChangeEvent } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SearchLink } from './SearchLink';
 import classNames from 'classnames';
@@ -10,7 +10,7 @@ export const PeopleFilters = () => {
   const sex = searchParams.get('sex') || '';
   const centuries = searchParams.getAll('centuries') || [];
 
-  function handleQueryChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleQueryChange(event: ChangeEvent<HTMLInputElement>) {
     const params = new URLSearchParams(searchParams);
 
     if (event.target.value === '') {

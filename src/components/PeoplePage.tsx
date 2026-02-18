@@ -38,8 +38,8 @@ export const PeoplePage = () => {
     .filter((person: Person) => {
       return (
         person.name.toLowerCase().includes(query.toLowerCase()) ||
-        person.motherName?.toLowerCase().includes(query.toLowerCase()) ||
-        person.fatherName?.toLowerCase().includes(query.toLowerCase())
+        (person.motherName || '').toLowerCase().includes(query.toLowerCase()) ||
+        (person.fatherName || '').toLowerCase().includes(query.toLowerCase())
       );
     })
     .filter((person: Person) => {
@@ -88,15 +88,13 @@ export const PeoplePage = () => {
                     <p data-cy="peopleLoadingError">Something went wrong</p>
                   )}
 
-                  {peoples.length > 0 && filteredPeople.length === 0 && (
-                    <p>
-                      There are no people matching the current search criteria
-                    </p>
-                  )}
-
-                  {filteredPeople.length === 0 ? (
+                  {peoples.length === 0 ? (
                     <p data-cy="noPeopleMessage">
                       There are no people on the server
+                    </p>
+                  ) : filteredPeople.length === 0 ? (
+                    <p>
+                      There are no people matching the current search criteria
                     </p>
                   ) : (
                     <PeopleTable peoples={filteredPeople} />
